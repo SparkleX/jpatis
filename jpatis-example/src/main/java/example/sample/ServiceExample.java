@@ -50,10 +50,16 @@ public class ServiceExample {
 		oUser = repoUser.findById(1).get();
 		System.out.println(oUser.getName());
 		
+		List<User> oList = repoUser.getUserListById(1);
+		DumpUtil.show(oList);
+		
+		oUser = repoUser.getUserById(1);
+		System.out.println(oUser);
+		
 		oUser.setName("Tom");
 		repoUser.update(oUser.getId(), oUser);
 		
-		List<User> oList = repoUser.findAll();
+		oList = repoUser.findAll();
 		DumpUtil.show(oList);
 		
 		repoUser.delete(oUser);

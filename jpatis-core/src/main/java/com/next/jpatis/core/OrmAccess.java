@@ -31,7 +31,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	final Logger logger = LoggerFactory.getLogger(OrmAccess.class);
 
 	public StringBuilder appendFieldName(StringBuilder sb, String field) {
-		return sb.append('\"').append(field).append('\"');
+		return sb.append(field);
 	}
 
 	public void fieldListSql(Object o, StringBuilder fieldList, StringBuilder paramList, ArrayList<Object> values,
@@ -100,7 +100,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	}
 
 	private String quote(String tableName) {
-		return new StringBuilder().append("\"").append(tableName).append("\"").toString();
+		return new StringBuilder().append(tableName).toString();
 	}
 
 	public OrmAccessParam updateSql(Object entity, Object id) {

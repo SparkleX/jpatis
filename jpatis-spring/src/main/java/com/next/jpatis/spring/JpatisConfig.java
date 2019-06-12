@@ -17,30 +17,26 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import com.next.jpatis.core.SqlConnection;
 
 @Configuration
-public class JpatisConfig extends JpaBaseConfiguration 
-{ 
-    JpatisConfig(DataSource dataSource, JpaProperties properties,
+public class JpatisConfig extends JpaBaseConfiguration {
+	JpatisConfig(DataSource dataSource, JpaProperties properties,
 			ObjectProvider<JtaTransactionManager> jtaTransactionManager,
 			ObjectProvider<TransactionManagerCustomizers> transactionManagerCustomizers) {
 		super(dataSource, properties, jtaTransactionManager, transactionManagerCustomizers);
 	}
-   
-    @Bean 
-    SqlConnection sqlConnection()
-    {
-    	return new SqlConnectionProxy();
-    }
+
+	@Bean
+	SqlConnection sqlConnection() {
+		return new SqlConnectionProxy();
+	}
+
 	@Override
-    protected AbstractJpaVendorAdapter createJpaVendorAdapter() 
-    { 
-        return new JpatisVendorAdapter(); 
-    }
+	protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
+		return new JpatisVendorAdapter();
+	}
+
 	@Override
-	protected Map<String, Object> getVendorProperties() 
-	{
-	    HashMap<String, Object> map = new HashMap<>();
-   
-	    return map;
+	protected Map<String, Object> getVendorProperties() {
+		return new HashMap<>();
 	}
 
 }
