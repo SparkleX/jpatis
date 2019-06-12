@@ -17,16 +17,13 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	public OrmAccess(Connection conn) {
 		super(conn);
 	}
-
-	final Logger logger = LoggerFactory.getLogger(OrmAccess.class);
 
 	public StringBuilder appendFieldName(StringBuilder sb, String field) {
 		return sb.append(field);
@@ -325,7 +322,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 				Field d = map.get(dbName.toUpperCase());
 				if (d == null) {
 					if (dbName.startsWith("U_") == false) {
-						logger.error(String.format("Column %s is not mapped", dbName));
+						log.error(String.format("Column %s is not mapped", dbName));
 					}
 				} else {
 					d.setAccessible(true);

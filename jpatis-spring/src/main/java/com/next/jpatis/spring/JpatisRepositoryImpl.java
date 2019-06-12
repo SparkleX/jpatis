@@ -138,7 +138,8 @@ public class JpatisRepositoryImpl<T, ID> implements JpatisRepository<T, ID>, Jpa
 
 	@Override
 	public boolean existsById(ID id) {
-		throw new UnsupportedOperationException();
+		return this.findById(id).isPresent();
+		
 	}
 
 	@Override
