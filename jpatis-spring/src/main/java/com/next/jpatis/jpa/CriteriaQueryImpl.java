@@ -14,12 +14,10 @@ import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.EntityType;
 
 import com.next.jpatis.core.JpaUtils;
-import com.next.jpatis.core.OrmAccess;
 
 public class CriteriaQueryImpl<T> implements CriteriaQuery<T>{
 
 	Class<T> resultClass;
-	private Selection<? extends T> selection;
 
 	public CriteriaQueryImpl(Class<T> resultClass) {
 		this.resultClass = resultClass;
@@ -88,7 +86,6 @@ public class CriteriaQueryImpl<T> implements CriteriaQuery<T>{
 	@Override
 	public CriteriaQuery<T> select(Selection<? extends T> selection) {
 		
-		this.selection = selection;
 		return this;
 		
 	}

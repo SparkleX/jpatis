@@ -28,11 +28,8 @@ import javax.persistence.metamodel.SingularAttribute;
 
 public class RootImpl<X> implements Root<X> {
 
-	private Class<X> entityClass;
-
 	public RootImpl(Class<X> entityClass) 
 	{
-		this.entityClass = entityClass;
 	}
 
 	@Override
@@ -44,7 +41,6 @@ public class RootImpl<X> implements Root<X> {
 	@Override
 	public boolean isCorrelated() {
 		throw new RuntimeException();
-		//return false;
 	}
 
 	@Override

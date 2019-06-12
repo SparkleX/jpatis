@@ -14,11 +14,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 				values.add(value);
 			}
 			if (this.isSupportUserDefinedField(o.getClass())) {
-				DynamicFieldsEntity udfObject = (DynamicFieldsEntity) o;
+				UserFieldsSupport udfObject = (UserFieldsSupport) o;
 				for (Entry<String, Object> entry : udfObject.getUserFields().entrySet()) {
 					String fieldName = entry.getKey();
 
@@ -281,7 +279,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	}
 
 	private boolean isSupportUserDefinedField(Class<?> clz) {
-		return DynamicFieldsEntity.class.isAssignableFrom(clz);
+		return UserFieldsSupport.class.isAssignableFrom(clz);
 	}
 
 
@@ -367,7 +365,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 						}
 					} else {
 						if (supportUdf) {
-							DynamicFieldsEntity dmo = (DynamicFieldsEntity) o;
+							UserFieldsSupport dmo = (UserFieldsSupport) o;
 							String colName = rs.getMetaData().getColumnLabel(i);
 							dmo.setUserField(colName, value);
 						} else {

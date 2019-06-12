@@ -242,7 +242,7 @@ public class EntityManagerImpl implements EntityManager
 
 	@Override
 	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> criteriaQuery) {
-		return new TypedQueryImpl(criteriaQuery, this);
+		return new TypedQueryImpl<T>(criteriaQuery, this);
 		
 	}
 

@@ -7,11 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class JdbcAccess {
-	final Logger logger = LoggerFactory.getLogger(JdbcAccess.class);
 
 	public Connection conn;
 	CallableStatement stat;
@@ -21,7 +20,6 @@ public class JdbcAccess {
 		this.conn = conn;
 	}
 
-	// @Override
 	public int getUpdateCount() {
 		return updateCount;
 	}
@@ -38,22 +36,6 @@ public class JdbcAccess {
 			resultSet = null;
 		}
 		updateCount = -1;
-	}
-
-	public ResultSet queryScalar(String sql, Object... values) throws Exception {
-		resultSet = query(sql, values);
-		if (resultSet.next() == false) {
-			throw new SQLNoDataException(getSqlForLog(sql, values));
-		}
-		return resultSet;
-	}
-
-	public Integer queryScalarInt(String sql, Object... values) throws Exception {
-		return queryScalar(sql, values).getInt(1);
-	}
-
-	public String queryScalarString(String sql, Object... values) throws Exception {
-		return queryScalar(sql, values).getString(1);
 	}
 
 	public void changeSingle(String sql, Object... values) throws Exception {
@@ -94,7 +76,7 @@ public class JdbcAccess {
 		try {
 			sql = sql.replace('[', '"').replace(']','"');
 			String sqlLog = getSqlForLog(sql, values);
-			logger.debug("begin SQL : {}", sqlLog);
+			log.debug("begin SQL : {}", sqlLog);
 			close();
 			stat = conn.prepareCall(sql);
 			if (values != null) {
@@ -111,7 +93,7 @@ public class JdbcAccess {
 			} else {
 				updateCount = stat.getUpdateCount();
 			}
-			logger.debug("finish execute SQL : {}", sqlLog);
+			log.debug("finish execute SQL : {}", sqlLog);
 		} catch (SQLException ex) {
 			throw new JpatisException(ex);
 		}
