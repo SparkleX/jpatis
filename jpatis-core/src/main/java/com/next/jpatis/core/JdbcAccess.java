@@ -129,23 +129,7 @@ public class JdbcAccess {
 		for (String sql : sqlBatch) {
 			stat.addBatch(sql);
 		}
-		// stat.executeBatch();
 		stat.executeBatch();
 		stat.close();
-		/*
-		 * boolean failed = false; for(int i=0;i<rt.length;i++) {
-		 * if(rt[i]==Statement.EXECUTE_FAILED) { this.logger.error("SQL : {}",
-		 * sqlBatch.get(i)); } } if(failed) { throw new
-		 * SQLException("SQL batch execution falied"); }
-		 */
-
 	}
-
-	/*
-	 * @Override public void afterPropertiesSet() throws Exception { this.conn =
-	 * dataSource.getConnection();
-	 * 
-	 * }
-	 */
-
 }
