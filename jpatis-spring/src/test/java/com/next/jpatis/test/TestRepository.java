@@ -3,6 +3,7 @@ package com.next.jpatis.test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,8 +53,28 @@ public class TestRepository {
 		
 	}	
 	@Test
-	public void testExample() throws Exception {
+	public void testFind() throws Exception {
 		List<Order> rt = this.orderRepo.findAll();
-		assertThat(rt.size()).isEqualTo(0);
+		assertThat(rt.size()).isGreaterThan(0);
+		
+		Optional<Order> entity = this.orderRepo.findById(99);
+		assertThat(entity.isPresent()).isEqualTo(false);
+		
+	}
+	
+	@Test
+	public void testQuery() throws Exception {
+		List<Order> rt = this.orderRepo.findByBpCode("C100");
+		assertThat(rt.size()).isEqualTo(1);
+		
+		Order entity = this.orderRepo.findOneByBpCode("C100");
+		assertThat(entity.getId()).isEqualTo(100);
+		
+		rt = this.orderRepo.findByNamedParam(100,"C100");
+		assertThat(rt.size()).isEqualTo(1);
+		
+		List<Object[]> array = this.orderRepo.findBySelect();
+		assertThat(array.size()).isEqualTo(2);
+		assertThat(array.get(0)[0]).isEqualTo("C100");
 	}
 }
