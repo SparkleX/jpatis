@@ -1,4 +1,4 @@
-package example.sample;
+package example.service;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import example.repository.UserRepository;
 
 @Service
 @Transactional
-public class ServiceExample {
+public class UserService {
 	@Autowired
 	UserRepository repoUser;
 
@@ -65,5 +65,23 @@ public class ServiceExample {
 		repoUser.delete(oUser);
 		oList = repoUser.findAll();
 		DumpUtil.show(oList);
+	}
+	public Integer create(User entity) {
+		repoUser.insert(entity);
+		return entity.getId();
+	}
+	public User update(Integer id, User entity) {
+		repoUser.updateById(id, entity);
+		return repoUser.findById(id).get();
+	}
+	
+	public List<User> search() {
+		return repoUser.findAll();
+	}
+	public void delete(Integer id) {
+		repoUser.deleteById(id);		
+	}
+	public User findById(Integer id) {
+		return repoUser.findById(id).get();	
 	}
 }
