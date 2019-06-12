@@ -79,7 +79,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	public OrmAccessParam insertSql(Object o) {
 		OrmAccessParam rt = new OrmAccessParam();
 		StringBuilder sql = new StringBuilder();
-		String tableName = getTableName(o.getClass());
+		String tableName = JpaUtils.getTableName(o.getClass());
 		String quotedTableName = this.quote(tableName);
 		sql.append("insert into ").append(quotedTableName).append("(");
 
@@ -103,12 +103,11 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 		return new StringBuilder().append(tableName).toString();
 	}
 
-	public OrmAccessParam updateSql(Object entity, Object id) {
-		OrmAccessParam rtWhere = sqlWhereById(entity.getClass(), id);
+	public OrmAccessParam updateSql(Object entity, OrmAccessParam rtWhere) {
 
 		OrmAccessParam rt = new OrmAccessParam();
 		StringBuilder sql = new StringBuilder();
-		sql.append("update ").append(getQuotedTableName(entity.getClass()));
+		sql.append("update ").append(JpaUtils.getTableName(entity.getClass()));
 
 		sql.append(" set ");
 		StringBuilder s1 = new StringBuilder();
@@ -212,31 +211,45 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	}
 
 	// @Override
-	public void update(Object o) throws JpatisException {
-		updateById(o, o);
-	}
+	public void update(Object entity) throws JpatisException {
+		OrmAccessParam p = sqlWhereByEntity(entity.getClass(), entity);
 
-	@Override
-	public void updateById(Object id, Object entity) {
-		OrmAccessParam p;
-		p = updateSql(entity, id);
+		p = updateSql(entity, p);
 		super.exec(p.sql, p.param.toArray());
 		if (super.getUpdateCount() == 0) {
 			throw new JpatisException("No record updated");
 		}
 	}
 
-	// @Override
+	@Override
+	public void updateById(Object id, Object entity) {
+		OrmAccessParam p = sqlWhereById(entity.getClass(), id);
+		p = updateSql(entity, p);
+		super.exec(p.sql, p.param.toArray());
+		if (super.getUpdateCount() == 0) {
+			throw new JpatisException("No record updated");
+		}
+	}
+
+	@Override
 	public void delete(Object o) {
 		OrmAccessParam p = sqlWhereByEntity(o.getClass(), o);
-		p.sql = "delete from " + this.getQuotedTableName(o.getClass()) + " " + p.sql;
+		p.sql = "delete from " + JpaUtils.getTableName(o.getClass()) + " " + p.sql;
 		super.exec(p.sql, p.param.toArray());
 	}
+	
+	@Override
+	public void deleteById(Object id, Class<?> entityClass) {
+		OrmAccessParam p = sqlWhereById(entityClass, id);
+		p.sql = "delete from " + JpaUtils.getTableName(entityClass) + " " + p.sql;
+		super.exec(p.sql, p.param.toArray());
+		
+	}	
 	@Override
 	public <T> Optional<T> findById(Class<T> clazz, Object id) {
 		OrmAccessParam orm;
 		orm = sqlWhereById(clazz, id);
-		String tableName = getTableName(clazz);
+		String tableName = JpaUtils.getTableName(clazz);
 		String sql = "select * from " + this.quote(tableName) + " " + orm.sql;
 		Optional<T> rt = loadOneEx(clazz, false, sql, orm.param.toArray());
 		return rt;
@@ -244,7 +257,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 
 	@Override
 	public <T> ArrayList<T> selectAll(Class<T> cls) throws JpatisException {
-		String tableName = getTableName(cls);
+		String tableName = JpaUtils.getTableName(cls);
 		return load(cls, "select * from " + this.quote(tableName));
 	}
 
@@ -271,20 +284,6 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 		return DynamicFieldsEntity.class.isAssignableFrom(clz);
 	}
 
-	private String getQuotedTableName(Class<?> clazz) {
-		return this.quote(getTableName(clazz));
-	}
-
-	public static String getTableName(Class<?> clazz) {
-		Entity entity = clazz.getAnnotation(Entity.class);
-		if (entity != null) {
-			String name = entity.name();
-			if (StringUtils.isEmpty(name) == false) {
-				return name;
-			}
-		}
-		return clazz.getSimpleName();
-	}
 
 	List<Object[]> loadEx(boolean lock, String sql, Object... values) throws JpatisException {
 		try {
@@ -473,7 +472,7 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 	// @Override
 	public <T> List<T> batchLoadByKey(Class<T> clazz, Set<Object> keys) throws Exception {
 		StringBuilder sql = new StringBuilder();
-		String tableName = getTableName(clazz);
+		String tableName = JpaUtils.getTableName(clazz);
 		sql.append("select *");
 		sql.append(" from ").append(quote(tableName));
 		sql.append(" where ");
@@ -526,6 +525,8 @@ final public class OrmAccess extends JdbcAccess implements SqlConnection {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 

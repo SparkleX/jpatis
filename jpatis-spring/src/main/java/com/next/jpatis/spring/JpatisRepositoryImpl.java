@@ -42,9 +42,12 @@ public class JpatisRepositoryImpl<T, ID> implements JpatisRepository<T, ID>, Jpa
 	public void insert(T o) {
 		getSqlConnection().insert(o);
 	}
-
 	@Override
-	public void update(ID id, T entity) {
+	public void update(T entity) {
+		getSqlConnection().update(entity);		
+	}
+	@Override
+	public void updateById(ID id, T entity) {
 		getSqlConnection().updateById(id, entity);
 	}
 
@@ -54,6 +57,11 @@ public class JpatisRepositoryImpl<T, ID> implements JpatisRepository<T, ID>, Jpa
 
 	}
 
+	@Override
+	public void deleteById(ID id) {
+		getSqlConnection().deleteById(id, type);
+
+	}
 	@Override
 	public List<T> findAll() {
 		List<T> rt = getSqlConnection().selectAll(type);
@@ -138,11 +146,6 @@ public class JpatisRepositoryImpl<T, ID> implements JpatisRepository<T, ID>, Jpa
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public void deleteById(ID id) {
-		throw new UnsupportedOperationException();
-
-	}
 
 	@Override
 	public void deleteAll(Iterable<? extends T> entities) {
@@ -200,4 +203,6 @@ public class JpatisRepositoryImpl<T, ID> implements JpatisRepository<T, ID>, Jpa
 	public long count(Specification<T> spec) {
 		throw new UnsupportedOperationException();
 	}
+
+
 }

@@ -13,6 +13,7 @@ import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.Subquery;
 import javax.persistence.metamodel.EntityType;
 
+import com.next.jpatis.core.JpaUtils;
 import com.next.jpatis.core.OrmAccess;
 
 public class CriteriaQueryImpl<T> implements CriteriaQuery<T>{
@@ -172,7 +173,7 @@ public class CriteriaQueryImpl<T> implements CriteriaQuery<T>{
 
 	String getSql() 
 	{
-		String table = OrmAccess.getTableName(this.resultClass);
+		String table = JpaUtils.getTableName(this.resultClass);
 		return "select * from " + table;
 	}
 

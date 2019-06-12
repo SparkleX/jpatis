@@ -60,5 +60,11 @@ public class SqlConnectionProxy implements SqlConnection{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void deleteById(Object id, Class<?> entityClass) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

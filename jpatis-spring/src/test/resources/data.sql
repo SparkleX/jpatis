@@ -1,0 +1,1 @@
+insert into "Order"(id, bpCode) values (100, 'C100');

@@ -57,7 +57,7 @@ public class ServiceExample {
 		System.out.println(oUser);
 		
 		oUser.setName("Tom");
-		repoUser.update(oUser.getId(), oUser);
+		repoUser.updateById(oUser.getId(), oUser);
 		
 		oList = repoUser.findAll();
 		DumpUtil.show(oList);
